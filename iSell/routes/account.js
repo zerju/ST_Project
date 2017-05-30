@@ -50,6 +50,7 @@ router.get('/logout', (req,res, next) => {
 });
 
 router.post('/register', (req,res, next)=> {
+    console.log(req.body);
     if (req.body == null || req.body.username == null || req.body.password == null || req.body.email == null) {
         res.json({
             status: '200',
