@@ -4,7 +4,7 @@
 
 
 class Auction{
-    constructor(auction_id, date_from, date_to, auction_name, auction_item, auction_user_id, item_description, price, category, pictures){
+    constructor(auction_id, date_from, date_to, auction_name, auction_item, auction_user_id, item_description, price, category, pictures, lat, long){
         this.auction_id = auction_id;
         this.date_from = date_from;
         this.date_to = date_to;
@@ -15,6 +15,8 @@ class Auction{
         this.price = price;
         this.category = category;
         this.pictures = pictures;
+        this.lat = lat;
+        this.long = long;
     }
 }
 

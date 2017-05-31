@@ -17,6 +17,7 @@ let config = require('../knexfile');
 let knex = require('knex')(config.development);
 let bookshelf = require('bookshelf')(knex);
 
+
 let UserModel = bookshelf.Model.extend({
    tableName: 'user'
 });
