@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {FormGroup, FormControl} from '@angular/forms';
+import {Http} from '@angular/http';
 
 /**
  * Generated class for the NewAuctionPage page.
@@ -13,12 +15,41 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'new-auction.html',
 })
 export class NewAuctionPage {
+  createAuctionForm: FormGroup;
+  url = 'http://127.0.0.1:3000/auction/create';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private http: Http) {
+    this.createAuctionForm = new FormGroup({
+      'name': new FormControl(),
+      'date_from': new FormControl(),
+      'date_to': new FormControl(),
+      'item_name': new FormControl(),
+      'item_description': new FormControl(),
+      'price': new FormControl(),
+      'category': new FormControl()
+    });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewAuctionPage');
+  create() {
+    let body = {
+      auction_name: this.createAuctionForm.value.name,
+      date_from: this.createAuctionForm.value.date_from,
+      date_to: this.createAuctionForm.value.date_to,
+      auction_item: this.createAuctionForm.value.item_name,
+      item_description: this.createAuctionForm.value.item_description,
+      price: this.createAuctionForm.value.price,
+      category: this.createAuctionForm.value.category,
+      auction_user_id: 1,  // dummy
+      lat: 10,             // dummy
+      long: 10             // dummy
+    };
+
+
+    this.http.post(this.url, body)
+        .subscribe(data => { console.log(data); },
+                   error => { console.log(error.json()); });
   }
 
+  ionViewDidLoad() { console.log('ionViewDidLoad NewAuctionPage'); }
 }

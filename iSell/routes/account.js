@@ -25,22 +25,42 @@ let UserModel = bookshelf.Model.extend({
 poljeUporanikov.push('jure');
 
 router.post('/login', (req,res, next) => {
-    let obstaja = false;
-    poljeUporanikov.forEach(function (element) {
-        if(element.username == req.body.username){
-            obstaja = true;
+    //console.log(req.body.username);
+    new UserModel().query({where: {'username': req.body.username}})
+    .fetch()
+    .then((data)=>{
+        //console.log(data);
+        if(data == null){
+            res.json({
+                status: '401'
+            });
+            console.log("401 ni uspelo 1 else")
+        }
+        else {
+            // console.log("pred-------");
+            // console.log(req.body.password);
+            // console.log(data.attributes.password);
+            bcrypt.compare(req.body.password, data.attributes.password, function(err, res){
+                // console.log("po-------");
+                // console.log(req.body.password);
+                // console.log(res);
+                // console.log(data.attributes.password);
+               
+                if(res){
+                    res.json({
+                    status: '200'
+                    });
+                    console.log("200 vse ok!")
+                }
+                else{
+                    res.json({
+                    status: '401',
+                    });
+                    console.log("401 ni uspelo 2 else")
+                }
+            });
         }
     });
-    if(obstaja){
-        prijavljeniUporabniki.push(req.body.username);
-        res.json({
-            status: '200',
-        });
-    } else{
-      res.json({
-          status: '401',
-      })
-    }
 });
 
 router.get('/logout', (req,res, next) => {
@@ -98,6 +118,3 @@ router.get('/profile:id', (req,res,next)=>{
 });
 
 module.exports = router;
-
-
-
