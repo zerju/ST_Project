@@ -14,5 +14,39 @@
 
 
 <ion-content padding>
-
+  <form [formGroup]="editAuctionForm">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Auction Name</ion-label>
+        <ion-input type="text" [(ngModel)]="auction_name" formControlName="name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Date From</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" [(ngModel)]="date_from" formControlName="date_from"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Date To</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" [(ngModel)]="date_to" formControlName="date_to"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Item Name</ion-label>
+        <ion-input type="text" [(ngModel)]="auction_item" formControlName="item_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Item Description</ion-label>
+        <ion-input type="text" [(ngModel)]="item_description" formControlName="item_description"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Price (€)</ion-label>
+        <ion-input type="number" [(ngModel)]="price" formControlName="price"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Category</ion-label>
+        <ion-input type="text" [(ngModel)]="category" formControlName="category"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div padding>
+      <button (click)="edit()" ion-button color="primary" block>Edit Auction</button>
+    </div>
+  </form>
 </ion-content>

@@ -7,12 +7,83 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>details-auction</ion-title>
+    <ion-title>{{auction_name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-grid padding>
+    <ion-row>
+      <ion-col col-12 text-center>Time until the end of the auction</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center col-3>DAYS</ion-col>
+      <ion-col text-center col-3>HOURS</ion-col>
+      <ion-col text-center col-3>MINUTES</ion-col>
+      <ion-col text-center col-3>SECONDS</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center col-3>{{days}}</ion-col>
+      <ion-col text-center col-3>{{hours}}</ion-col>
+      <ion-col text-center col-3>{{minutes}}</ion-col>
+      <ion-col text-center col-3>{{seconds}}</ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Name</ion-col>
+        <ion-col col-8>{{ auction_name }}</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Item</ion-col>
+        <ion-col col-8>{{ auction_item }}</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Start</ion-col>
+        <ion-col col-8>{{ date_from | date: 'dd/MM/yyyy H:mm' }}</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>End</ion-col>
+        <ion-col col-8>{{ date_to | date: 'dd/MM/yyyy H:mm' }}</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Description</ion-col>
+        <ion-col col-8>{{ item_description }}</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Price</ion-col>
+        <ion-col col-8>{{ price }}€</ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item text-wrap>
+      <ion-row>
+        <ion-col col-4>Category</ion-col>
+        <ion-col col-8>{{ category }}</ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-grid>
+  <ion-slides options="{pager:true}">
+    <ion-slide>
+      <img src="https://shop.savethechildren.org.uk/wp-content/uploads/2016/10/football-1.png">
+    </ion-slide>
+    <ion-slide>
+      <img src="https://shop.wilson.com/media/catalog/product/w/t/wtf1100-1.jpg">
+    </ion-slide>
+    <ion-slide>
+      <img src="https://www2.deloitte.com/content/dam/Deloitte/uk/Images/promo_images/Campaign/sport/uk-deloitte-sbg-football-us-fans-promo.jpg">
+    </ion-slide>
+  </ion-slides>
 </ion-content>

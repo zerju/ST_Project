@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Http, RequestOptions } from '@angular/http';
+import {Component} from '@angular/core';
+import {FormGroup, FormControl} from '@angular/forms';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Http} from '@angular/http';
 
 /**
  * Generated class for the RegisterPage page.
@@ -15,10 +15,10 @@ import { Http, RequestOptions } from '@angular/http';
   templateUrl: 'register.html',
 })
 export class RegisterPage {
+  registerForm: FormGroup;
 
- registerForm: FormGroup;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private http: Http) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              private http: Http) {
     this.registerForm = new FormGroup({
       'username': new FormControl(),
       'email': new FormControl(),
@@ -27,22 +27,18 @@ export class RegisterPage {
   }
 
   register() {
-    let body = {username: this.registerForm.value.username, password: this.registerForm.value.password, email: this.registerForm.value.email };
+    let body = {
+      username: this.registerForm.value.username,
+      password: this.registerForm.value.password,
+      email: this.registerForm.value.email
+    };
     console.log(this.registerForm.value.username);
     let url = 'http://127.0.0.1:3000/account/register';
 
-    this.http
-      .post(url, body)
-        .subscribe(data => {
-              console.log(data);
-        }, error => {
-            console.log(error.json());
-        });
+    this.http.post(url, body).subscribe(data => {
+      console.log(data);
+    }, error => { console.log(error.json()); });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RegisterPage');
-  }
-
-
+  ionViewDidLoad() { console.log('ionViewDidLoad RegisterPage'); }
 }

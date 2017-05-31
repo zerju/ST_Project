@@ -14,5 +14,39 @@
 
 
 <ion-content padding>
-
+  <form [formGroup]="createAuctionForm">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Auction Name</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Date From</ion-label>
+        <ion-datetime pickerFormat="DD/MM/YYYY HH:mm" formControlName="date_from"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Date To</ion-label>
+        <ion-datetime pickerFormat="DD/MM/YYYY HH:mm" formControlName="date_to"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Item Name</ion-label>
+        <ion-input type="text" formControlName="item_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Item Description</ion-label>
+        <ion-input type="text" formControlName="item_description"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Price (€)</ion-label>
+        <ion-input type="number" formControlName="price"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Category</ion-label>
+        <ion-input type="text" formControlName="category"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div padding>
+      <button (click)="create()" ion-button color="primary" block>Create Auction</button>
+    </div>
+  </form>
 </ion-content>
