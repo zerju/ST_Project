@@ -47,8 +47,8 @@ router.post('/login', (req, res, next) => {
                            // console.log(data.attributes.password);
 
                            if (res) {
-                             var myToken = jwt.sign({username: req.body.username}, 'iSell 4 ever');
-                             res.status(200).json(myToken);
+                             var myToken = jwt.sign({username: data.attributes.username}, 'iSell 4 ever');
+                             res.status(200).json({'token': token, 'id': data.attributes.userId});
                              console.log("200 vse ok!")
                            } else {
                              res.status(401).json({
