@@ -10,6 +10,7 @@ let router = express.Router();
 let config = require('../knexfile');
 let knex = require('knex')(config.development);
 let bookshelf = require('bookshelf')(knex);
+var _ = require('lodash');
 
 
 let bids = [];
@@ -173,16 +174,12 @@ router.delete('/delete', (req, res, next) => {
 });
 
 router.post('/placeBid', (req, res, next) => {
-  // let newBid = new
-  // Bid(bids.length+1,req.body.user_id,req.body.auction_id,req.body.value);
-
-  // bids.push(newBid);
-
   let userId = req.body.userId;
   let auctionId = req.body.auctionId;
+  let value = req.body.value;
 
   new BidModel()
-      .save({user_id: userId, auction_id: auctionId})
+      .save({user_id: userId, auction_id: auctionId, 'value': value})
       .then((data) => {
         if (data === null || data === undefined) {
           res.json({status: '500'});
@@ -190,6 +187,29 @@ router.post('/placeBid', (req, res, next) => {
           res.json({status: '200'});
         }
       });
+});
+
+router.get('/highestBid', (req, res, next) => {
+
+  let auction_id = req.query.auction_id;
+  let respData = [];
+
+  new BidModel()
+      .where('auction_id', '=', auction_id)
+      .fetchAll()
+      .then((data) => {
+        if (data === null || data === undefined) {
+          res.json({'status': 500});
+        } else {
+          // console.log(_.maxBy(data.toJSON(), 'value'));
+          data.models.forEach(function(model) {
+            respData.push(model.attributes);
+          });
+          max_value = _.maxBy(respData, 'value');
+          res.json({'status': 200, 'data': max_value});
+        }
+      });
+
 });
 
 module.exports = router;

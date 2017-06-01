@@ -31,10 +31,36 @@
       <ion-col text-center col-3>{{seconds}}</ion-col>
     </ion-row>
   </ion-grid>
-  <ion-item>
-    <ion-label>BID</ion-label>
-    <ion-input type="number" placeholder="€" [(ngModel)]="bid"></ion-input><button (click)="placeBid()">Submit Bid</button>
-  </ion-item>
+  <form [formGroup]="bidForm" (ngSubmit)="placeBid(bidForm)">
+    <ion-grid>
+      <ion-row>
+        <ion-col>Highest Bid</ion-col>
+        <ion-col>
+          <div *ngIf=" yourHighest; else elseBlock">
+            <span class="highestBid"> {{ highestBid }}€ <p>*you have the highest bid</p></span>
+          </div>
+          <ng-template #elseBlock>
+            {{ highestBid }}€
+          </ng-template>
+        </ion-col>
+
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-4>
+          <ion-label>BID</ion-label>
+        </ion-col>
+        <ion-col col-8>
+          <ion-item>
+
+            <ion-input type="number" formControlName="bid" placeholder="€" [(ngModel)]="bid"></ion-input>
+
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <button type="submit" ion-button color="primary" col-6>Submit Bid</button>
+  </form>
   <ion-grid>
     <ion-item text-wrap>
       <ion-row>
@@ -90,4 +116,8 @@
       <img src="https://www2.deloitte.com/content/dam/Deloitte/uk/Images/promo_images/Campaign/sport/uk-deloitte-sbg-football-us-fans-promo.jpg">
     </ion-slide>
   </ion-slides>
+  <ion-row>
+    <ion-col col-6><button ion-button color="danger">Delete Auction</button></ion-col>
+    <ion-col col-6><button (click)="editAuction()" ion-button color="warning">Edit Auction</button></ion-col>
+  </ion-row>
 </ion-content>

@@ -34,10 +34,13 @@ export class EditAuctionPage {
   lat: number;
   long: number;
 
+  load_auction_id: number;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {
-    this.getAuction(5);
+    this.load_auction_id = navParams.get("id");
+    this.getAuction(this.load_auction_id);
     this.editAuctionForm = new FormGroup({
       'name': new FormControl(),
       'date_from': new FormControl(),

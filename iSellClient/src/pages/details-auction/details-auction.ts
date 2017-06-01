@@ -3,8 +3,10 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Rx';
-import {Subscription} from "rxjs/Subscription";
 import * as myGlobals from '../../app/globals';
+import {EditAuctionPage} from '../edit-auction/edit-auction';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {CustomValidators} from 'ng2-validation';
 
 /**
  * Generated class for the DetailsAuctionPage page.
@@ -19,10 +21,13 @@ import * as myGlobals from '../../app/globals';
 })
 export class DetailsAuctionPage implements AfterContentInit {
   urlGetData = myGlobals.rootUrl + '/auction/details?id=';
+  urlPlaceBid = myGlobals.rootUrl + '/auction/placeBid';
+  urlHighestBid = myGlobals.rootUrl + '/auction/highestBid?auction_id=';
+  urlDelete = myGlobals.rootUrl + '/auction/delete?delete=';
 
 
   private diff: number;
-  private countDownResult: number;
+  // private countDownResult: number;
   days: number;
   hours: number;
   minutes: number;
@@ -42,10 +47,18 @@ export class DetailsAuctionPage implements AfterContentInit {
   long: number;
 
   bid: number;
+  highestBid: number;
+  yourHighest: boolean;
+  userId: number = 2;
+
+  bidForm: FormGroup;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {
     this.getAuction(5);
+
+    this.bidForm =
+        new FormGroup({'bid': new FormControl(null, [Validators.required])});
   }
 
 
@@ -61,6 +74,8 @@ export class DetailsAuctionPage implements AfterContentInit {
           this.minutes = this.getMinutes(this.diff);
           this.seconds = this.getSeconds(this.diff);
         });
+
+    console.log(this.auction_id);
   }
 
   getDays(t) {
@@ -119,11 +134,52 @@ export class DetailsAuctionPage implements AfterContentInit {
           this.category = data.data.category;
           this.lat = data.data.lat;
           this.long = data.data.long;
+          this.getHighestBid();
+
+
         });
   }
 
 
-  placeBid() {}
+  placeBid(value: any) {
+    if (value.valid) {
+      let body = {value: this.bid, userId: 2, auctionId: this.auction_id};
+
+      this.http.post(this.urlPlaceBid, body)
+          .subscribe(data => {
+            console.log(data);
+            this.getHighestBid()
+          }, error => { console.log(error.json()); });
+    }
+  }
+
+  getHighestBid() {
+    this.http.get(this.urlHighestBid + this.auction_id)
+        .map((res: Response) => res.json())
+        .subscribe(data => {
+          if (data.data === undefined) {
+            this.highestBid = this.price;
+            this.bidForm.get('bid')
+                .setValidators(CustomValidators.min(this.highestBid + 1));
+          } else {
+            this.highestBid = data.data.value;
+            this.bidForm.get('bid')
+                .setValidators(CustomValidators.min(this.highestBid + 1));
+            data.data.user_id == this.userId ? this.yourHighest = true :
+                                               this.yourHighest = false;
+          }
+        });
+  }
+
+  deleteAuction() {
+    let auction_id = this.auction_id;
+
+    this.http.delete(this.urlDelete + auction_id);
+  }
+
+  editAuction() { this.navCtrl.push(EditAuctionPage, {id: this.auction_id}); }
+
+
 
   ionViewDidLoad() { console.log('ionViewDidLoad DetailsAuctionPage'); }
 }
