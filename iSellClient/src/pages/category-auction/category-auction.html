@@ -1,0 +1,38 @@
+<!--
+  Generated template for the CategoryAuctionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Categories</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="card-background-page">
+
+  <ion-card (click)="openCategory(auto)">
+    <img src="https://pbs.twimg.com/profile_images/1755288203/Ferrari_612_GTO.jpg" />
+    <div class="card-title">Auto-Moto</div>
+  </ion-card>
+
+  <ion-card (click)="openCategory(tech)">
+    <img src="https://www.whitecase.com/sites/whitecase/files/technology_tablet_1920x960_0.jpg" />
+    <div class="card-title">Technology</div>
+  </ion-card>
+
+  <ion-card (click)="openCategory(pet)">
+    <img src="http://www.gogreen.org/portals/0/images/pets-topics-image.jpg" />
+    <div class="card-title">Pets</div>
+  </ion-card>
+
+  <ion-card (click)="openCategory(art)">
+    <img src="http://bmoca.org/media/exhibition_images/1773/small_IMG_8326_cew_large.jpg" />
+    <div class="card-title">Art</div>
+  </ion-card>
+
+</ion-content>

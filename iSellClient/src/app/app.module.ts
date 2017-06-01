@@ -3,6 +3,13 @@ import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
+import {Geolocation} from '@ionic-native/geolocation';
+import {Camera, CameraOptions} from '@ionic-native/camera';
+import {
+  Transfer,
+  FileUploadOptions,
+  TransferObject
+} from '@ionic-native/transfer';
 
 import {MyApp} from './app.component';
 import {HomePage} from '../pages/home/home';
@@ -14,6 +21,12 @@ import {EditAuctionPage} from '../pages/edit-auction/edit-auction';
 import {NewAuctionPage} from '../pages/new-auction/new-auction';
 import {HttpModule} from '@angular/http';
 import {ReactiveFormsModule} from '@angular/forms';
+import {LocationAuctionPage} from '../pages/location-auction/location-auction';
+import {SearchAuctionPage} from '../pages/search-auction/search-auction';
+import {CategoryAuctionPage} from '../pages/category-auction/category-auction';
+import {
+  SingleCategoryAuctionPage
+} from '../pages/single-category-auction/single-category-auction';
 
 @NgModule({
   declarations: [
@@ -24,7 +37,11 @@ import {ReactiveFormsModule} from '@angular/forms';
     DetailsAuctionPage,
     FindAuctionPage,
     EditAuctionPage,
-    NewAuctionPage
+    NewAuctionPage,
+    LocationAuctionPage,
+    SearchAuctionPage,
+    CategoryAuctionPage,
+    SingleCategoryAuctionPage
   ],
   imports: [
     BrowserModule,
@@ -41,11 +58,18 @@ import {ReactiveFormsModule} from '@angular/forms';
     DetailsAuctionPage,
     FindAuctionPage,
     EditAuctionPage,
-    NewAuctionPage
+    NewAuctionPage,
+    LocationAuctionPage,
+    SearchAuctionPage,
+    CategoryAuctionPage,
+    SingleCategoryAuctionPage
   ],
   providers: [
+    Transfer,
+    Camera,
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

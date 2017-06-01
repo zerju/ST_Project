@@ -1,0 +1,18 @@
+<!--
+  Generated template for the SingleCategoryAuctionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{category}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item *ngFor="let auction of auctions" (click)="goToAuction(auction.id)">{{auction.auction_name}}</ion-item>
+</ion-content>

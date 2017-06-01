@@ -7,12 +7,20 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>find-auction</ion-title>
+    <ion-title>Find Auctions</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-row padding>
+    <button (click)="goToSearch()" ion-button color="primary" block>Search</button>
+  </ion-row>
+  <ion-row padding>
+    <button (click)="goToLocation()" ion-button color="secondary" block>By Location</button>
+  </ion-row>
+  <ion-row padding>
+    <button (click)="goToCategory()" ion-button color="danger" block>Categories</button>
+  </ion-row>
 </ion-content>

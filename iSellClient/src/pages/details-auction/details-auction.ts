@@ -55,7 +55,7 @@ export class DetailsAuctionPage implements AfterContentInit {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {
-    this.getAuction(5);
+    this.getAuction(this.navParams.get('id'));
 
     this.bidForm =
         new FormGroup({'bid': new FormControl(null, [Validators.required])});

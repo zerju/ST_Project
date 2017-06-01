@@ -3,6 +3,12 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Http} from '@angular/http';
 import * as myGlobals from '../../app/globals';
+import {Camera, CameraOptions} from '@ionic-native/camera';
+import {
+  Transfer,
+  FileUploadOptions,
+  TransferObject
+} from '@ionic-native/transfer';
 
 /**
  * Generated class for the NewAuctionPage page.
@@ -18,9 +24,11 @@ import * as myGlobals from '../../app/globals';
 export class NewAuctionPage {
   createAuctionForm: FormGroup;
   url = myGlobals.rootUrl + '/auction/create';
+  urlUpload = myGlobals.rootUrl + '/auction/upload';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http) {
+              private http: Http, private transfer: Transfer,
+              private camera: Camera) {
     this.createAuctionForm = new FormGroup({
       'name': new FormControl(),
       'date_from': new FormControl(),
@@ -50,6 +58,47 @@ export class NewAuctionPage {
     this.http.post(this.url, body)
         .subscribe(data => { console.log(data); },
                    error => { console.log(error.json()); });
+  }
+
+  upload() {
+    const options: CameraOptions =
+    {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      saveToPhotoAlbum: true
+    }
+
+    console.log(options);
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+
+
+      const fileTransfer: TransferObject = this.transfer.create();
+
+      let options1: FileUploadOptions = {
+        fileKey: 'file',
+        fileName: 'name.jpg',
+        headers: {}
+
+      };
+      alert("deluje");
+      fileTransfer.upload(imageData, this.urlUpload, options1)
+          .then(
+              (data) => {
+                // success
+                alert("success");
+              },
+              (err) => {
+                // error
+                alert("error" + JSON.stringify(err));
+              });
+
+
+    });
   }
 
   ionViewDidLoad() { console.log('ionViewDidLoad NewAuctionPage'); }

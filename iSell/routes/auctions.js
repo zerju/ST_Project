@@ -11,6 +11,10 @@ let config = require('../knexfile');
 let knex = require('knex')(config.development);
 let bookshelf = require('bookshelf')(knex);
 var _ = require('lodash');
+var busboy = require('connect-busboy');  // middleware for form/file upload
+var path = require('path');              // used for file path
+var fs = require('fs-extra');
+var fs = require('fs');  // File System - for file manipulation
 
 
 let bids = [];
@@ -132,7 +136,8 @@ router.get('/byLocation', (req, res, next) => {
 
   new AuctionModel()
       .query(function(qb) {
-        qb.where('lat', '=', lat).where('long', '=', long);
+        qb.whereBetween('lat', [Number(lat) - 1, Number(lat) + 1])
+            .whereBetween('long', [Number(long)-1, Number(long)+1]);
       })
       .fetchAll()
       .then((data) => {
@@ -212,4 +217,91 @@ router.get('/highestBid', (req, res, next) => {
 
 });
 
+
+router.get('/myAuctions', (req, res, next) => {
+  let user_id = req.query.user_id;
+  let respData = [];
+
+  new AuctionModel()
+      .where('user_id', '=', user_id)
+      .fetchAll()
+      .then((data) => {
+        if (data === null || data === undefined || data.models.length < 1) {
+          res.json({'status': 200});
+        } else {
+          data.models.forEach(function(model) {
+            respData.push(model.attributes);
+          });
+          res.json(
+              {'status': 200, 'data': JSON.parse(JSON.stringify(respData))});
+        }
+      });
+});
+
+router.get('/myBids', (req, res, next) => {
+  let user_id = req.query.user_id;
+  let respData = [];
+
+  new BidModel()
+      .query(function(qb) {
+        qb.where('user_id', '=', user_id).groupBy('auction_id');
+      })
+      .fetchAll()
+      .then((data) => {
+        if (data === null || data === undefined || data.models.length < 1) {
+          res.json({'status': 500});
+        } else {
+          let ids = [];
+          _.forEach(data.models, (value) => {
+            console.log(value);
+            ids.push(value.attributes.auction_id);
+          });
+          console.log(ids);
+          new AuctionModel()
+              .query(function(qb) { qb.whereIn('id', ids) })
+              .fetchAll()
+              .then((data) => {
+                if (data === null || data === undefined ||
+                    data.models.length < 1) {
+                  res.json({'status': 500});
+                } else {
+                  data.models.forEach(function(model) {
+                    respData.push(model.attributes);
+                  });
+                  console.log(respData);
+                  res.json({
+                    'status': 200,
+                    'data': JSON.parse(JSON.stringify(respData))
+                  });
+                }
+              });
+        }
+      });
+});
+
+router.post('/upload', function(req, res, next) {
+
+  var tempPath = req.files.file.path,
+      targetPath = path.resolve('./img/image.png');
+
+  fs.rename(tempPath, targetPath, function(err) {
+    if (err) throw err;
+    console.log("Upload completed!");
+  });
+
+
+  /* var fstream;
+   req.pipe(req.busboy);
+   req.busboy.on('file', function(fieldname, file, filename) {
+     console.log("Uploading: " + filename);
+
+     // Path where image will be uploaded
+     fstream = fs.createWriteStream(__dirname + '/img/' + filename);
+     file.pipe(fstream);
+     fstream.on('close', function() {
+       console.log("Upload Finished of " + filename);
+       // res.redirect('back');  // where to go next
+     });
+   });*/
+});
 module.exports = router;

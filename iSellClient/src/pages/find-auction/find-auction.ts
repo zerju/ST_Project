@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {CategoryAuctionPage} from '../category-auction/category-auction';
+import {SearchAuctionPage} from '../search-auction/search-auction';
+import {LocationAuctionPage} from '../location-auction/location-auction';
 
 /**
  * Generated class for the FindAuctionPage page.
@@ -13,12 +16,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'find-auction.html',
 })
 export class FindAuctionPage {
+  categoryAuction: CategoryAuctionPage;
+  searchAuction: SearchAuctionPage;
+  locationAuction: LocationAuctionPage;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FindAuctionPage');
-  }
+  ionViewDidLoad() { console.log('ionViewDidLoad FindAuctionPage'); }
 
+  goToSearch() { this.navCtrl.push(SearchAuctionPage); }
+
+  goToCategory() { this.navCtrl.push(CategoryAuctionPage); }
+
+  goToLocation() { this.navCtrl.push(LocationAuctionPage); }
 }
