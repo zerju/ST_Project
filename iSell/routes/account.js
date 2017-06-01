@@ -2,6 +2,10 @@
  * Created by Jure on 12. 03. 2017.
  */
 
+var expressJWT = require('express-jwt');
+var jwt = require('jsonwebtoken');
+
+
 let User = require('../models/user');
 let express = require('express');
 let router = express.Router();
@@ -29,7 +33,7 @@ router.post('/login', (req, res, next) => {
       .then((data) => {
         // console.log(data);
         if (data == null) {
-          res.json({status: '401'});
+          res.status(401).json({status: '401'});
           console.log("401 ni uspelo 1 else")
         } else {
           // console.log("pred-------");
@@ -43,10 +47,11 @@ router.post('/login', (req, res, next) => {
                            // console.log(data.attributes.password);
 
                            if (res) {
-                             res.json({status: '200'});
+                             var myToken = jwt.sign({username: req.body.username}, 'iSell 4 ever');
+                             res.status(200).json(myToken);
                              console.log("200 vse ok!")
                            } else {
-                             res.json({
+                             res.status(401).json({
                                status: '401',
                              });
                              console.log("401 ni uspelo 2 else")
@@ -57,8 +62,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-  prijavljeniUporabniki.splice(prijavljeniUporabniki.indexOf(req.body.username),
-                               1);
+  prijavljeniUporabniki.splice(prijavljeniUporabniki.indexOf(req.body.username), 1);
   res.json({
     status: '200',
   });
