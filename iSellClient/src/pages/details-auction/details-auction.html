@@ -31,6 +31,10 @@
       <ion-col text-center col-3>{{seconds}}</ion-col>
     </ion-row>
   </ion-grid>
+  <ion-item>
+    <ion-label>BID</ion-label>
+    <ion-input type="number" placeholder="€" [(ngModel)]="bid"></ion-input><button (click)="placeBid()">Submit Bid</button>
+  </ion-item>
   <ion-grid>
     <ion-item text-wrap>
       <ion-row>

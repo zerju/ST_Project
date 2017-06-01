@@ -3,6 +3,7 @@ import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+import * as myGlobals from '../../app/globals';
 
 /**
  * Generated class for the EditAuctionPage page.
@@ -17,8 +18,8 @@ import 'rxjs/add/operator/map';
 })
 export class EditAuctionPage {
   editAuctionForm: FormGroup;
-  url = 'http://127.0.0.1:3000/auction/edit';
-  urlGetData = 'http://127.0.0.1:3000/auction/details?id=';
+  url = myGlobals.rootUrl + '/auction/edit';
+  urlGetData = myGlobals.rootUrl + '/auction/details?id=';
 
   auction_id: number;
   date_from: string;

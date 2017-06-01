@@ -1,6 +1,8 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { DetailsAuctionPage } from './details-auction';
+import {NgModule} from '@angular/core';
+import {IonicPageModule} from 'ionic-angular';
+import {DetailsAuctionPage} from './details-auction';
+import {AppModule} from '../../app/app.module';
+
 
 @NgModule({
   declarations: [
@@ -9,8 +11,7 @@ import { DetailsAuctionPage } from './details-auction';
   imports: [
     IonicPageModule.forChild(DetailsAuctionPage),
   ],
-  exports: [
-    DetailsAuctionPage
-  ]
+  exports: [DetailsAuctionPage]
 })
-export class DetailsAuctionPageModule {}
+export class DetailsAuctionPageModule {
+}

@@ -4,6 +4,7 @@ import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Rx';
 import {Subscription} from "rxjs/Subscription";
+import * as myGlobals from '../../app/globals';
 
 /**
  * Generated class for the DetailsAuctionPage page.
@@ -17,7 +18,7 @@ import {Subscription} from "rxjs/Subscription";
   templateUrl: 'details-auction.html',
 })
 export class DetailsAuctionPage implements AfterContentInit {
-  urlGetData = 'http://127.0.0.1:3000/auction/details?id=';
+  urlGetData = myGlobals.rootUrl + '/auction/details?id=';
 
 
   private diff: number;
@@ -39,6 +40,8 @@ export class DetailsAuctionPage implements AfterContentInit {
   pictures: string;
   lat: number;
   long: number;
+
+  bid: number;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {
@@ -101,6 +104,7 @@ export class DetailsAuctionPage implements AfterContentInit {
   }
 
   getAuction(id: number) {
+    console.log(this.urlGetData);
     return this.http.get(this.urlGetData + id.toString())
         .map((res: Response) => res.json())
         .subscribe(data => {
@@ -119,6 +123,7 @@ export class DetailsAuctionPage implements AfterContentInit {
   }
 
 
+  placeBid() {}
 
   ionViewDidLoad() { console.log('ionViewDidLoad DetailsAuctionPage'); }
 }

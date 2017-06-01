@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Http} from '@angular/http';
+import * as myGlobals from '../../app/globals';
 
 /**
  * Generated class for the NewAuctionPage page.
@@ -16,7 +17,7 @@ import {Http} from '@angular/http';
 })
 export class NewAuctionPage {
   createAuctionForm: FormGroup;
-  url = 'http://127.0.0.1:3000/auction/create';
+  url = myGlobals.rootUrl + '/auction/create';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {

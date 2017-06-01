@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Http} from '@angular/http';
+import * as myGlobals from '../../app/globals';
 
 /**
  * Generated class for the LoginPage page.
@@ -16,6 +17,7 @@ import {Http} from '@angular/http';
 })
 export class LoginPage {
   loginForm: FormGroup;
+  url = myGlobals.rootUrl + '/account/login';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
               private http: Http) {
@@ -29,11 +31,10 @@ export class LoginPage {
       password: this.loginForm.value.password
     };
     console.log(this.loginForm.value.username);
-    let url = 'http://127.0.0.1:3000/account/login';
 
-    this.http.post(url, body).subscribe(data => {
-      console.log(data);
-    }, error => { console.log(error.json()); });
+    this.http.post(this.url, body)
+        .subscribe(data => { console.log(data); },
+                   error => { console.log(error.json()); });
   }
 
   ionViewDidLoad() { console.log('ionViewDidLoad LoginPage'); }
