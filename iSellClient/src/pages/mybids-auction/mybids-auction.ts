@@ -16,12 +16,14 @@ import {DetailsAuctionPage} from '../details-auction/details-auction';
   templateUrl: 'mybids-auction.html',
 })
 export class MybidsAuctionPage {
-  urlMyBids: string = myGlobals.rootUrl + '/auction/myBids?id=user_id';
+  urlMyBids: string = myGlobals.rootUrl + '/auction/myBids?user_id=';
   user_id: number = 2;
   auctions: {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http) {}
+              private http: Http) {
+    this.getAuctions();
+  }
 
   getAuctions() {
     this.http.get(this.urlMyBids + this.user_id)

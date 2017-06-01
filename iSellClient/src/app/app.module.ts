@@ -24,6 +24,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {LocationAuctionPage} from '../pages/location-auction/location-auction';
 import {SearchAuctionPage} from '../pages/search-auction/search-auction';
 import {CategoryAuctionPage} from '../pages/category-auction/category-auction';
+import {MybidsAuctionPage} from '../pages/mybids-auction/mybids-auction';
+import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
 import {
   SingleCategoryAuctionPage
 } from '../pages/single-category-auction/single-category-auction';
@@ -41,7 +43,9 @@ import {
     LocationAuctionPage,
     SearchAuctionPage,
     CategoryAuctionPage,
-    SingleCategoryAuctionPage
+    SingleCategoryAuctionPage,
+    MybidsAuctionPage,
+    MyAuctionsPage
   ],
   imports: [
     BrowserModule,
@@ -62,7 +66,9 @@ import {
     LocationAuctionPage,
     SearchAuctionPage,
     CategoryAuctionPage,
-    SingleCategoryAuctionPage
+    SingleCategoryAuctionPage,
+    MybidsAuctionPage,
+    MyAuctionsPage
   ],
   providers: [
     Transfer,
