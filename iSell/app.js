@@ -11,6 +11,9 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var account = require('./routes/account')
 var auction = require('./routes/auctions');
+//jwt tokens
+var expressJWT = require('express-jwt');
+var jwt = require('jsonwebtoken');
 
 var app = express();
 
@@ -31,6 +34,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//
+app.use(expressJWT({secret: 'iSell 4 ever' }).unless({path: ['/account/login', '/account/register'] }) );
 
 //app.use('/', index);
 app.use('/users', users);
