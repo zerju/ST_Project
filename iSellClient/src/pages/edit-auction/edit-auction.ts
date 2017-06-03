@@ -1,9 +1,12 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {FormGroup, FormControl} from '@angular/forms';
-import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import {Component} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Http, Response} from '@angular/http';
+import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+
 import * as myGlobals from '../../app/globals';
+import {HomePage} from '../home/home';
 
 /**
  * Generated class for the EditAuctionPage page.
@@ -20,6 +23,7 @@ export class EditAuctionPage {
   editAuctionForm: FormGroup;
   url = myGlobals.rootUrl + '/auction/edit';
   urlGetData = myGlobals.rootUrl + '/auction/details?id=';
+  categories: string[] = ['auto-moto', 'technology', 'pets', 'art'];
 
   auction_id: number;
   date_from: string;
@@ -37,9 +41,10 @@ export class EditAuctionPage {
   load_auction_id: number;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http) {
-    this.load_auction_id = navParams.get("id");
+  constructor(
+      public navCtrl: NavController, public navParams: NavParams,
+      private http: Http, private toastCtrl: ToastController) {
+    this.load_auction_id = navParams.get('id');
     this.getAuction(this.load_auction_id);
     this.editAuctionForm = new FormGroup({
       'name': new FormControl(),
@@ -91,9 +96,24 @@ export class EditAuctionPage {
 
 
     this.http.post(this.url, body)
-        .subscribe(data => { console.log(data); },
-                   error => { console.log(error.json()); });
+        .subscribe(
+            data => {
+              console.log(data);
+              this.presentToast('Auction edited!');
+              this.navCtrl.push(HomePage);
+            },
+            error => {
+              console.log(error.json());
+              this.presentToast('Oops, something went wrong.');
+            });
   }
 
-  ionViewDidLoad() { console.log('ionViewDidLoad EditAuctionPage'); }
+  presentToast(message: string) {
+    let toast = this.toastCtrl.create({message: message, duration: 2500});
+    toast.present();
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad EditAuctionPage');
+  }
 }

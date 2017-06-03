@@ -1,11 +1,16 @@
-page-details-auction {
+page-details-auction {}
 
+.highestBid {
+    color: green;
+    p {
+        font-size: 12px;
+    }
 }
 
-.highestBid{
-  color: green;
+.slides img {
+    height: 80vh!important;
+}
 
-  p{
-    font-size: 12px;
-  }
+.bidButton {
+  margin-left: 30%;
 }

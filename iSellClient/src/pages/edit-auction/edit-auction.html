@@ -14,7 +14,7 @@
 
 
 <ion-content padding>
-  <form [formGroup]="editAuctionForm">
+  <form [formGroup]="editAuctionForm" #editForm="ngForm">
     <ion-list>
       <ion-item>
         <ion-label floating>Auction Name</ion-label>
@@ -42,11 +42,13 @@
       </ion-item>
       <ion-item>
         <ion-label floating>Category</ion-label>
-        <ion-input type="text" [(ngModel)]="category" formControlName="category"></ion-input>
+        <ion-select interface="popover" formControlName="category" [(ngModel)]="category">
+          <ion-option *ngFor="let category of categories" [value]="category">{{category |capitalize}}</ion-option>
+        </ion-select>
       </ion-item>
     </ion-list>
     <div padding>
-      <button (click)="edit()" ion-button color="primary" block>Update</button>
+      <button (click)="edit()" [disabled]="!editForm.form.valid" ion-button color="primary" block>Update</button>
     </div>
   </form>
 </ion-content>
