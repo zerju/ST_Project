@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {FormGroup, FormControl} from '@angular/forms';
-import { Http, Response } from '@angular/http';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Http, Response} from '@angular/http';
+import {Storage} from '@ionic/Storage';
+import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+
 import * as myGlobals from '../../app/globals';
-import { Storage } from '@ionic/Storage';
-import { HomePage } from '../home/home';
+import {HomePage} from '../home/home';
 
 
 /**
@@ -23,8 +24,10 @@ export class LoginPage {
   url = myGlobals.rootUrl + '/account/login';
   userID: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http, private storage: Storage) {
+  constructor(
+      public navCtrl: NavController, public navParams: NavParams,
+      private http: Http, private storage: Storage,
+      private toastCtrl: ToastController) {
     this.loginForm = new FormGroup(
         {'username': new FormControl(), 'password': new FormControl()});
   }
@@ -38,16 +41,29 @@ export class LoginPage {
     this.http.post(this.url, body)
         .map((res: Response) => res.json())
         .subscribe((data) => {
-          this.userID = data.userID;
-          console.log(data.userID);
-        });
-    this.storage.set('userID', this.userID)
+          console.log(data);
+          if(data.status == "401" ){
+            this.presentToast('Wrong login information!');
+          }else{
+            this.userID = data.userID;
+            console.log(data.userID);
+            this.storage.set('userID', this.userID);
+            this.navCtrl.setRoot(HomePage);
 
-    this.navCtrl.setRoot(HomePage);
+          }
+        });
+
+
+
 
     //this.storage.get('userID').then((val) => {
       //console.log('userID', val);
     //});
+  }
+
+  presentToast(message: string) {
+    let toast = this.toastCtrl.create({message: message, duration: 2500});
+    toast.present();
   }
 
   ionViewDidLoad() { console.log('ionViewDidLoad LoginPage'); }

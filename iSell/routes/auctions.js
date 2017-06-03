@@ -109,6 +109,7 @@ router.get('/details', (req, res, next) => {
       res.json({status: '500'});
     } else {
       auction = data.toJSON();
+      console.log(auction.id);
       new PictureModel().query({where: {'auction_id':data.attributes.id}}).fetchAll().then((data)=> {
         if(data === null || data === undefined || data.models < 1){
           respData = [];

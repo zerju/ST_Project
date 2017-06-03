@@ -1,8 +1,11 @@
-import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import * as myGlobals from '../../app/globals';
-import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import {Component} from '@angular/core';
+import {Http, Response} from '@angular/http';
+import {Storage} from '@ionic/Storage';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+
+import * as myGlobals from '../../app/globals';
 import {DetailsAuctionPage} from '../details-auction/details-auction';
 
 /**
@@ -18,21 +21,28 @@ import {DetailsAuctionPage} from '../details-auction/details-auction';
 })
 export class MyAuctionsPage {
   urlMyAuctions: string = myGlobals.rootUrl + '/auction/myAuctions?user_id=';
-  user_id: number = 1;
+  userId: number;
   auctions: {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http) {
+  constructor(
+      public navCtrl: NavController, public navParams: NavParams,
+      private http: Http, private storage: Storage) {
+
     this.getAuctions();
   }
 
   getAuctions() {
-    this.http.get(this.urlMyAuctions + this.user_id)
-        .map((res: Response) => res.json())
-        .subscribe(data => {
-          this.auctions = data.data;
-          console.log(data);
-        });
+    this.storage.get('userID').then((val) => {
+      this.userId = val;
+      console.log(val);
+      this.http.get(this.urlMyAuctions + this.userId)
+          .map((res: Response) => res.json())
+          .subscribe(data => {
+            this.auctions = data.data;
+            console.log(data);
+          });
+    });
+
   }
 
   goToAuction(id: number) { this.navCtrl.push(DetailsAuctionPage, {id: id}); }

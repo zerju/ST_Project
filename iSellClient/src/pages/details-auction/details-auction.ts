@@ -3,6 +3,7 @@ import 'rxjs/add/operator/map';
 import {AfterContentInit, Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Http, RequestMethod, RequestOptions, Response} from '@angular/http';
+import {Storage} from '@ionic/Storage';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {CustomValidators} from 'ng2-validation';
 import {Observable} from 'rxjs/Rx';
@@ -51,15 +52,18 @@ export class DetailsAuctionPage implements AfterContentInit {
   bid: number;
   highestBid: number;
   yourHighest: boolean;
-  userId: number = 1;
-  canBid = false;
+  userId: number;
+  canBid: boolean = false;
+  canEdit: boolean = false;
 
   pictures: {id: number, picture_url: string, auction_id: string, rootUrl: string};
 
   bidForm: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http) {
+  constructor(
+      public navCtrl: NavController, public navParams: NavParams,
+      private http: Http, private storage: Storage) {
+
     this.getAuction(this.navParams.get('id'));
 
     this.bidForm =
@@ -81,7 +85,7 @@ export class DetailsAuctionPage implements AfterContentInit {
           this.seconds = this.getSeconds(this.diff);
         });
 
-    console.log(this.auction_id);
+
   }
 
   getDays(t) {
@@ -125,43 +129,51 @@ export class DetailsAuctionPage implements AfterContentInit {
   }
 
   getAuction(id: number) {
-    return this.http.get(this.urlGetData + id.toString())
-        .map((res: Response) => res.json())
-        .subscribe(data => {
-          console.log(data.pictures.length);
-          for(let i = 0;i < data.pictures.length;i++){
-            data.pictures[i].picture_url =
-                this.urlRoot +'/' + data.pictures[i].picture_url;
-                console.log(data.pictures[i]);
-          }
-          this.pictures = data.pictures;
-          this.auction_id = data.data.id;
-          this.date_from = data.data.date_from;
-          this.date_to = data.data.date_to;
-          this.auction_name = data.data.auction_name;
-          this.auction_item = data.data.auction_item;
-          this.auction_user_id = data.data.auction_user_id;
-          this.item_description = data.data.item_description;
-          this.price = data.data.price;
-          this.category = data.data.category;
-          this.lat = data.data.lat;
-          this.long = data.data.long;
-          /*for(let i = 0;i < data.pictures.length;i++){
-            data.pictures[i].picture_url =
-                rootUrl + '/' + data.pictures[i].picture_url;
-          }*/
-          this.pictures = data.pictures;
+    this.storage.get('userID').then((val) => {
+      this.userId = val;
+      return this.http.get(this.urlGetData + id.toString())
+          .map((res: Response) => res.json())
+          .subscribe(data => {
+            console.log(data.pictures.length);
+            for (let i = 0; i < data.pictures.length; i++) {
+              data.pictures[i].picture_url =
+                  this.urlRoot + '/' + data.pictures[i].picture_url;
+              console.log(data.pictures[i]);
+            }
+            this.pictures = data.pictures;
+            this.auction_id = data.data.id;
+            this.date_from = data.data.date_from;
+            this.date_to = data.data.date_to;
+            this.auction_name = data.data.auction_name;
+            this.auction_item = data.data.auction_item;
+            this.auction_user_id = data.data.user_id;
+            this.item_description = data.data.item_description;
+            this.price = data.data.price;
+            this.category = data.data.category;
+            this.lat = data.data.lat;
+            this.long = data.data.long;
+            /*for(let i = 0;i < data.pictures.length;i++){
+              data.pictures[i].picture_url =
+                  rootUrl + '/' + data.pictures[i].picture_url;
+            }*/
+            this.pictures = data.pictures;
+            this.canBid = this.auction_user_id != this.userId;
+            this.canEdit = this.auction_user_id == this.userId;
+            console.log(this.auction_user_id);
 
-          this.getHighestBid();
+            console.log(this.canEdit);
+            this.getHighestBid();
 
 
-        });
+          });
+    });
+
   }
 
 
   placeBid(value: any) {
     if (value.valid) {
-      let body = {value: this.bid, userId: 2, auctionId: this.auction_id};
+      let body = {value: this.bid, userId: this.userId, auctionId: this.auction_id};
 
       this.http.post(this.urlPlaceBid, body)
           .subscribe(data => {

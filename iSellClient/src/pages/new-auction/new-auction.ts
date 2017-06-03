@@ -9,6 +9,7 @@ import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angula
 import * as myGlobals from '../../app/globals';
 import {AddImagesPage} from '../add-images/add-images';
 import {HomePage} from '../home/home';
+import { Storage } from '@ionic/Storage';
 
 /**
  * Generated class for the NewAuctionPage page.
@@ -25,6 +26,7 @@ export class NewAuctionPage {
   categories: string[] = ['auto-moto', 'technology', 'pets', 'art'];
   lat: number;
   long: number;
+  userId: number;
   // today = new Date();
   // dd = this.today.getDate();
   // mm = this.today.getMonth() + 1;  // January is 0!
@@ -35,7 +37,11 @@ export class NewAuctionPage {
   constructor(
       public navCtrl: NavController, public navParams: NavParams,
       private http: Http, private transfer: Transfer, private camera: Camera,
-      private geolocation: Geolocation, private toastCtrl: ToastController) {
+      private geolocation: Geolocation, private toastCtrl: ToastController,
+      private storage: Storage) {
+    this.storage.get('userID').then((val) => {
+      this.userId = val;
+    });
     geolocation.getCurrentPosition().then(pos => {
       this.lat = pos.coords.latitude;
       this.long = pos.coords.longitude;
@@ -60,7 +66,7 @@ export class NewAuctionPage {
       item_description: this.createAuctionForm.value.item_description,
       price: this.createAuctionForm.value.price,
       category: this.createAuctionForm.value.category,
-      auction_user_id: 1,
+      auction_user_id: this.userId,
       lat: this.lat,
       long: this.long
     };

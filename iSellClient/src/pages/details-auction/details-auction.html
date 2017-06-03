@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{auction_name}}</ion-title>
+    <ion-title>{{auction_name|capitalize}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -46,7 +46,7 @@
 
       </ion-row>
 
-      <ion-row>
+      <ion-row *ngIf="canBid">
         <ion-col col-4>
           <ion-label>BID</ion-label>
         </ion-col>
@@ -59,7 +59,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <button class="bidButton" [disabled]="userId != auction_user_id" type="submit" ion-button color="primary" col-6>Submit Bid</button>
+    <button *ngIf="canBid" class="bidButton" type="submit" ion-button color="primary" col-6>Submit Bid</button>
   </form>
   <ion-grid>
     <ion-item text-wrap>
@@ -111,7 +111,7 @@
     </ion-slide>
 
   </ion-slides>
-  <ion-row>
+  <ion-row *ngIf="canEdit">
     <ion-col col-6><button (click)="deleteAuction()" ion-button color="danger">Delete Auction</button></ion-col>
     <ion-col col-6><button (click)="editAuction()" ion-button color="warning">Edit Auction</button></ion-col>
   </ion-row>
