@@ -14,7 +14,7 @@
 
 
 <ion-content padding>
-  <form [formGroup]="createAuctionForm">
+  <form [formGroup]="createAuctionForm" (ngSubmit)="create()" #createForm="ngForm">
     <ion-list>
       <ion-item>
         <ion-label floating>Auction Name</ion-label>
@@ -42,14 +42,17 @@
       </ion-item>
       <ion-item>
         <ion-label floating>Category</ion-label>
-        <ion-input type="text" formControlName="category"></ion-input>
+        <ion-select interface="popover" formControlName="category">
+          <ion-option *ngFor="let category of categories" [value]="category">{{category |capitalize}}</ion-option>
+        </ion-select>
       </ion-item>
       <!--<ion-item>
         <button ion-button (click)="upload()" ion-button>Take Pic & Upload </button>
       </ion-item>-->
     </ion-list>
     <div padding>
-      <button (click)="create()" ion-button color="primary" block>Create Auction</button>
+      <button type="submit" [disabled]="!createForm.form.valid" ion-button color="primary" block>Next</button>
+      <!--<button type="submit" ion-button color="primary" block>Next</button>-->
     </div>
   </form>
 </ion-content>

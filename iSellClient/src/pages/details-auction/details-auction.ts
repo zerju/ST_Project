@@ -1,12 +1,15 @@
-import {Component, AfterContentInit} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
+
+import {AfterContentInit, Component} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Http, RequestMethod, RequestOptions, Response} from '@angular/http';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {CustomValidators} from 'ng2-validation';
 import {Observable} from 'rxjs/Rx';
+
 import * as myGlobals from '../../app/globals';
 import {EditAuctionPage} from '../edit-auction/edit-auction';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {CustomValidators} from 'ng2-validation';
+import {HomePage} from '../home/home';
 
 /**
  * Generated class for the DetailsAuctionPage page.
@@ -24,7 +27,7 @@ export class DetailsAuctionPage implements AfterContentInit {
   urlPlaceBid = myGlobals.rootUrl + '/auction/placeBid';
   urlHighestBid = myGlobals.rootUrl + '/auction/highestBid?auction_id=';
   urlDelete = myGlobals.rootUrl + '/auction/delete?delete=';
-
+  urlRoot = myGlobals.rootUrl;
 
   private diff: number;
   // private countDownResult: number;
@@ -42,14 +45,16 @@ export class DetailsAuctionPage implements AfterContentInit {
   item_description: string;
   price: number;
   category: string;
-  pictures: string;
   lat: number;
   long: number;
 
   bid: number;
   highestBid: number;
   yourHighest: boolean;
-  userId: number = 2;
+  userId: number = 1;
+  canBid = false;
+
+  pictures: {id: number, picture_url: string, auction_id: string, rootUrl: string};
 
   bidForm: FormGroup;
 
@@ -63,6 +68,7 @@ export class DetailsAuctionPage implements AfterContentInit {
 
 
   ngAfterContentInit() {
+
     Observable.interval(1000)
         .map((x) => {
           this.diff = Math.floor(
@@ -119,10 +125,16 @@ export class DetailsAuctionPage implements AfterContentInit {
   }
 
   getAuction(id: number) {
-    console.log(this.urlGetData);
     return this.http.get(this.urlGetData + id.toString())
         .map((res: Response) => res.json())
         .subscribe(data => {
+          console.log(data.pictures.length);
+          for(let i = 0;i < data.pictures.length;i++){
+            data.pictures[i].picture_url =
+                this.urlRoot +'/' + data.pictures[i].picture_url;
+                console.log(data.pictures[i]);
+          }
+          this.pictures = data.pictures;
           this.auction_id = data.data.id;
           this.date_from = data.data.date_from;
           this.date_to = data.data.date_to;
@@ -134,6 +146,12 @@ export class DetailsAuctionPage implements AfterContentInit {
           this.category = data.data.category;
           this.lat = data.data.lat;
           this.long = data.data.long;
+          /*for(let i = 0;i < data.pictures.length;i++){
+            data.pictures[i].picture_url =
+                rootUrl + '/' + data.pictures[i].picture_url;
+          }*/
+          this.pictures = data.pictures;
+
           this.getHighestBid();
 
 
@@ -173,8 +191,12 @@ export class DetailsAuctionPage implements AfterContentInit {
 
   deleteAuction() {
     let auction_id = this.auction_id;
-
-    this.http.delete(this.urlDelete + auction_id);
+    let options =
+        new RequestOptions({method: RequestMethod.Delete});
+    this.http.delete(this.urlDelete + auction_id, options).map((res:Response)=> res.json()).subscribe(data=> {
+      console.log(data);
+    });
+    this.navCtrl.push(HomePage);
   }
 
   editAuction() { this.navCtrl.push(EditAuctionPage, {id: this.auction_id}); }

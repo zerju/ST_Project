@@ -1,14 +1,14 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {FormGroup, FormControl} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Http} from '@angular/http';
-import * as myGlobals from '../../app/globals';
 import {Camera, CameraOptions} from '@ionic-native/camera';
-import {
-  Transfer,
-  FileUploadOptions,
-  TransferObject
-} from '@ionic-native/transfer';
+import {Geolocation} from '@ionic-native/geolocation';
+import {FileUploadOptions, Transfer, TransferObject} from '@ionic-native/transfer';
+import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+
+import * as myGlobals from '../../app/globals';
+import {AddImagesPage} from '../add-images/add-images';
+import {HomePage} from '../home/home';
 
 /**
  * Generated class for the NewAuctionPage page.
@@ -17,26 +17,37 @@ import {
  * on Ionic pages and navigation.
  */
 @IonicPage()
-@Component({
-  selector: 'page-new-auction',
-  templateUrl: 'new-auction.html',
-})
+@Component({selector: 'page-new-auction', templateUrl: 'new-auction.html'})
 export class NewAuctionPage {
   createAuctionForm: FormGroup;
   url = myGlobals.rootUrl + '/auction/create';
   urlUpload = myGlobals.rootUrl + '/auction/upload';
+  categories: string[] = ['auto-moto', 'technology', 'pets', 'art'];
+  lat: number;
+  long: number;
+  // today = new Date();
+  // dd = this.today.getDate();
+  // mm = this.today.getMonth() + 1;  // January is 0!
+  // yyyy = this.today.getFullYear();
+  // minDate = this.dd + '/' + this.mm + '/' + this.yyyy;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              private http: Http, private transfer: Transfer,
-              private camera: Camera) {
+
+  constructor(
+      public navCtrl: NavController, public navParams: NavParams,
+      private http: Http, private transfer: Transfer, private camera: Camera,
+      private geolocation: Geolocation, private toastCtrl: ToastController) {
+    geolocation.getCurrentPosition().then(pos => {
+      this.lat = pos.coords.latitude;
+      this.long = pos.coords.longitude;
+    });
     this.createAuctionForm = new FormGroup({
-      'name': new FormControl(),
-      'date_from': new FormControl(),
-      'date_to': new FormControl(),
-      'item_name': new FormControl(),
-      'item_description': new FormControl(),
-      'price': new FormControl(),
-      'category': new FormControl()
+      'name': new FormControl('', [Validators.required]),
+      'date_from': new FormControl('', [Validators.required]),
+      'date_to': new FormControl('', [Validators.required]),
+      'item_name': new FormControl('', [Validators.required]),
+      'item_description': new FormControl('', [Validators.required]),
+      'price': new FormControl('', [Validators.required]),
+      'category': new FormControl('', [Validators.required])
     });
   }
 
@@ -49,57 +60,30 @@ export class NewAuctionPage {
       item_description: this.createAuctionForm.value.item_description,
       price: this.createAuctionForm.value.price,
       category: this.createAuctionForm.value.category,
-      auction_user_id: 1,  // dummy
-      lat: 10,             // dummy
-      long: 10             // dummy
+      auction_user_id: 1,
+      lat: this.lat,
+      long: this.long
     };
 
-
-    this.http.post(this.url, body)
-        .subscribe(data => { console.log(data); },
-                   error => { console.log(error.json()); });
+    this.navCtrl.push(AddImagesPage, {body: body});
+    /*this.http.post(this.url, body)
+        .subscribe(
+            data => {
+              this.presentToast('Auction Created');
+              this.navCtrl.push(HomePage);
+            },
+            error => {
+              console.log(error.json());
+              this.presentToast('Oops, something went wrong');
+            });*/
   }
 
-  upload() {
-    const options: CameraOptions =
-    {
-      quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      saveToPhotoAlbum: true
-    }
-
-    console.log(options);
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64:
-
-
-      const fileTransfer: TransferObject = this.transfer.create();
-
-      let options1: FileUploadOptions = {
-        fileKey: 'file',
-        fileName: 'name.jpg',
-        headers: {}
-
-      };
-      alert("deluje");
-      fileTransfer.upload(imageData, this.urlUpload, options1)
-          .then(
-              (data) => {
-                // success
-                alert("success");
-              },
-              (err) => {
-                // error
-                alert("error" + JSON.stringify(err));
-              });
-
-
-    });
+  presentToast(message: string) {
+    let toast = this.toastCtrl.create({message: message, duration: 2500});
+    toast.present();
   }
 
-  ionViewDidLoad() { console.log('ionViewDidLoad NewAuctionPage'); }
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad NewAuctionPage');
+  }
 }

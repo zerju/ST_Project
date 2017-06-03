@@ -15,6 +15,8 @@ var auction = require('./routes/auctions');
 var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 
+var bodyParser = require('body-parser');
+
 var app = express();
 
 // view engine setup
@@ -27,15 +29,16 @@ app.engine('html', require('ejs').renderFile);
 
 
 app.use(express.static(path.join(__dirname, 'client')));
+console.log(__dirname);
 app.use(cors());
-
+app.use(bodyParser.json());
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public/images'));
 
 //
 // app.use(expressJWT({secret: 'iSell 4 ever' }).unless({path:
@@ -52,7 +55,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
 
 
 // error handlers
