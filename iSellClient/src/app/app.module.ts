@@ -29,6 +29,7 @@ import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
 import {
   SingleCategoryAuctionPage
 } from '../pages/single-category-auction/single-category-auction';
+import { Storage } from '@ionic/storage';
 
 @NgModule({
   declarations: [
