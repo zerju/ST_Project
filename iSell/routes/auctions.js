@@ -16,10 +16,11 @@ var path = require('path');              // used for file path
 var fs = require('fs-extra');
 var fs = require('fs');  // File System - for file manipulation
 var multer = require('multer');
+var nodemailer = require('nodemailer');
 
 
 
-    let bids = [];
+let bids = [];
 
 let AuctionModel = bookshelf.Model.extend({tableName: 'auction'});
 
@@ -325,19 +326,6 @@ router.post(
     '/upload', multer({storage: storage}).single('file'),
     function(req, res, next) {
 
-      //var auction = JSON.parse(req.body.body);
-      
-
-      /*let date_from = auction.date_from;
-      let date_to = auction.date_to;
-      let name = auction.auction_name;
-      let item = auction.auction_item;
-      let user_id = auction.auction_user_id;
-      let description = auction.item_description;
-      let price = auction.price;
-      let category = auction.category;
-      let lat = auction.lat;
-      let long = auction.long;*/
       console.log(req.body);
       let auction_id = Number.parseInt(req.body.auction_id);
 
@@ -352,88 +340,85 @@ router.post(
               });
             }
           });
-    
-      /* let exists = (req.body.exists == 'true');
-       console.log(auction_id);
-       console.log(exists);
-       if(!exists){
-         new AuctionModel({'id': auction_id}).fetch().then(function(model) {
-           if(model !== null || model !== undefined){
-             exists = true;
-           }
-         });
-       }
-       if(exists){
-         new PictureModel()
-             .save({picture_url: req.file.filename, auction_id: auction_id})
-             .then((data) => {
-               if (data === null || data === undefined) {
-                 res.json({'status': '500'});
-               } else {
-                 res.json({
-                   'status': '200',
-                   'auction_id': auction_id,
-                   'exists': exists
-                 });
-               }
-             });
-       }else{
-       new AuctionModel()
-           .save({
-             date_from: date_from,
-             date_to: date_to,
-             auction_name: name,
-             auction_item: item,
-             user_id: user_id,
-             item_description: description,
-             price: price,
-             category: category,
-             lat: lat,
-             long: long
-           })
-           .then((data) => {
-             if (data === null || data === undefined) {
-               res.json({'status': '500'});
-             } else {
-               auction_id = data.attributes.id;
-               new PictureModel()
-                   .save({
-                     picture_url: req.file.filename,
-                     auction_id: auction_id
-                   })
-                   .then((data) => {
-                     if (data === null || data === undefined) {
-                       res.json({'status': '500'});
-                     } else {
-                       res.json({'status': '200', 'auction_id': auction_id,
-       'exists': exists});
-                     }
-                   });
-             }
-           });*/
-     
-      /* var tempPath = req.files.file.path,
-           targetPath = path.resolve('./img/image.png');
-
-       fs.rename(tempPath, targetPath, function(err) {
-         if (err) throw err;
-         console.log("Upload completed!");
-       });*/
-
-      // res.json({'status': 200});
-
-      /* var fstream;
-       req.pipe(req.busboy);
-       req.busboy.on('file', function(fieldname, file, filename) {
-         console.log("Uploading: " + filename);
-
-         // Path where image will be uploaded
-         fstream = fs.createWriteStream(__dirname + '/img/' + filename);
-         file.pipe(fstream);
-         fstream.on('close', function() {
-           console.log("Upload Finished of " + filename);
-           // res.redirect('back');  // where to go next
-         });
-       });*/
     });
+
+router.post('/sendEmail', handleSayHello);
+function handleSayHello(req, res) {
+  let winner_email = req.body.winner;
+  let seller_email = req.body.seller;
+  let auction_name = req.body.auction_name;
+  var text =
+      'Hello, \n\n You have won the Auction for the item on iSell. The seller will contact you shortly. \n\n Have a good day,\n Team iSell';
+
+  var text2 =
+      'Hello, \n\n The winner of your auction is '+ winner_email +'. \n\n. Contact them for more information. Have a good day,\n Team iSell';
+  const user_name = 'zerju12@gmail.com';
+  const refresh_token = '1/I-PkzN2efS7JLxD24vd3ulUy8F22xqTlkNYP8Wp3LyU';
+  const access_token =
+      'ya29.GlteBFB2R97ZsBxWn6iDF6mIYaIIBUSXtk-enAV4No4VvTUCHE-crGbRPYBkP9UG5qkHs04eX_1ieLHxWrIi6PnJI0QHLUBFBzCQSUq_aTi1Fi52sr17GWDpLpGn';
+  const client_id =
+      '80220105165-41r5if1otpa098tikem3c0l9gmblvg3s.apps.googleusercontent.com';
+  const client_secret = '_h1LA7EM3-cpf3QqxVHYh5VC';
+
+  const email_to = winner_email;
+  const email_to_seller = seller_email;
+
+  const nodemailer = require('nodemailer');
+
+  let transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {type: 'OAuth2', clientId: client_id, clientSecret: client_secret}
+  });
+  transporter.on('token', token => {
+    console.log('A new access token was generated');
+    console.log('User: %s', token.user);
+    console.log('Access Token: %s', token.accessToken);
+    console.log('Expires: %s', new Date(token.expires));
+  });
+  // setup e-mail data with unicode symbols
+  let mailOptions = {
+    from: user_name,               // sender address
+    to: email_to,                  // list of receivers
+    subject: 'Congratz for wining the Auction',            // Subject line
+    text: text,                    // plaintext body
+    html: text,  // html body
+
+    auth: {
+      user: user_name,
+      refreshToken: refresh_token,
+      accessToken: access_token,
+      expires: new Date().getTime() + 2000
+    }
+  };
+
+  let mailOptions2 = {
+    from: user_name,                             // sender address
+    to: email_to_seller,                         // list of receivers
+    subject: 'The winner information',  // Subject line
+    text: text2,                                  // plaintext body
+    html: text2,                                  // html body
+
+    auth: {
+      user: user_name,
+      refreshToken: refresh_token,
+      accessToken: access_token,
+      expires: new Date().getTime() + 2000
+    }
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message sent: ' + info.response);
+  });
+
+  transporter.sendMail(mailOptions2, function(error, info) {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message sent: ' + info.response);
+  });
+}
 module.exports = router;

@@ -29,8 +29,6 @@ import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single
 import {MyApp} from './app.component';
 import {CapitalizePipe} from './capitalize.pipe';
 
-import { Storage } from '@ionic/storage';
-
 
 @NgModule({
   declarations: [
