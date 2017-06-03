@@ -2,10 +2,6 @@
  * Created by Jure on 12. 03. 2017.
  */
 
-var expressJWT = require('express-jwt');
-var jwt = require('jsonwebtoken');
-
-
 let User = require('../models/user');
 let express = require('express');
 let router = express.Router();
@@ -31,27 +27,30 @@ router.post('/login', (req, res, next) => {
       .query({where: {'username': req.body.username}})
       .fetch()
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         if (data == null) {
-          res.status(401).json({status: '401'});
+          res.json({
+            status: '401'
+          });
           console.log("401 ni uspelo 1 else")
         } else {
           // console.log("pred-------");
           // console.log(req.body.password);
           // console.log(data.attributes.password);
           bcrypt.compare(req.body.password, data.attributes.password,
-                         function(err, res) {
-                           // console.log("po-------");
-                           // console.log(req.body.password);
-                           // console.log(res);
-                           // console.log(data.attributes.password);
+                         function(err, hash) {
+                           console.log("po-------");
+                           console.log(req.body.password);
+                           console.log(hash);
+                           console.log(data.attributes.id);
 
-                           if (res) {
-                             var myToken = jwt.sign({username: data.attributes.username}, 'iSell 4 ever');
-                             res.status(200).json({'token': token, 'id': data.attributes.userId});
-                             console.log("200 vse ok!")
+                           if (hash) {
+                             res.json({
+                               'userID': data.attributes.id
+                              });
+                             console.log(data.attributes.userId)
                            } else {
-                             res.status(401).json({
+                             res.json({
                                status: '401',
                              });
                              console.log("401 ni uspelo 2 else")

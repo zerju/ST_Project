@@ -19,6 +19,7 @@ import {HomePage} from '../pages/home/home';
 import {LocationAuctionPage} from '../pages/location-auction/location-auction';
 import {LoginPage} from '../pages/login/login';
 import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
+
 import {MybidsAuctionPage} from '../pages/mybids-auction/mybids-auction';
 import {NewAuctionPage} from '../pages/new-auction/new-auction';
 import {RegisterPage} from '../pages/register/register';
@@ -27,6 +28,9 @@ import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single
 
 import {MyApp} from './app.component';
 import {CapitalizePipe} from './capitalize.pipe';
+
+import { Storage } from '@ionic/storage';
+
 
 @NgModule({
   declarations: [
