@@ -26,10 +26,8 @@ import {SearchAuctionPage} from '../pages/search-auction/search-auction';
 import {CategoryAuctionPage} from '../pages/category-auction/category-auction';
 import {MybidsAuctionPage} from '../pages/mybids-auction/mybids-auction';
 import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
-import {
-  SingleCategoryAuctionPage
-} from '../pages/single-category-auction/single-category-auction';
-import { Storage } from '@ionic/storage';
+import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single-category-auction';
+import { IonicStorageModule } from '@ionic/Storage';
 
 @NgModule({
   declarations: [
@@ -52,7 +50,8 @@ import { Storage } from '@ionic/storage';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -77,6 +76,7 @@ import { Storage } from '@ionic/storage';
     StatusBar,
     SplashScreen,
     Geolocation,
+    Storage,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
