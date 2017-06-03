@@ -4,6 +4,8 @@ import {FormGroup, FormControl} from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import * as myGlobals from '../../app/globals';
 import { Storage } from '@ionic/Storage';
+import { HomePage } from '../home/home';
+
 
 /**
  * Generated class for the LoginPage page.
@@ -39,11 +41,13 @@ export class LoginPage {
           this.userID = data.userID;
           console.log(data.userID);
         });
-    this.storage.set('userID', this.userID);
+    this.storage.set('userID', this.userID)
 
-    this.storage.get('userID').then((val) => {
-      console.log('userID', val);
-    });
+    this.navCtrl.setRoot(HomePage);
+
+    //this.storage.get('userID').then((val) => {
+      //console.log('userID', val);
+    //});
   }
 
   ionViewDidLoad() { console.log('ionViewDidLoad LoginPage'); }

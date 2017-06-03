@@ -20,11 +20,13 @@ import {LocationAuctionPage} from '../pages/location-auction/location-auction';
 import {LoginPage} from '../pages/login/login';
 import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
 
+import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single-category-auction';
+import { IonicStorageModule } from '@ionic/Storage';
+
 import {MybidsAuctionPage} from '../pages/mybids-auction/mybids-auction';
 import {NewAuctionPage} from '../pages/new-auction/new-auction';
 import {RegisterPage} from '../pages/register/register';
 import {SearchAuctionPage} from '../pages/search-auction/search-auction';
-import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single-category-auction';
 
 import {MyApp} from './app.component';
 import {CapitalizePipe} from './capitalize.pipe';
@@ -38,7 +40,13 @@ import {CapitalizePipe} from './capitalize.pipe';
     MybidsAuctionPage, MyAuctionsPage, CapitalizePipe, AddImagesPage
   ],
   imports: [
-    BrowserModule, IonicModule.forRoot(MyApp), ReactiveFormsModule, HttpModule
+
+    BrowserModule,
+    IonicModule.forRoot(MyApp),
+    ReactiveFormsModule,
+    HttpModule,
+    IonicStorageModule.forRoot()
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -48,7 +56,15 @@ import {CapitalizePipe} from './capitalize.pipe';
     MybidsAuctionPage, MyAuctionsPage, AddImagesPage
   ],
   providers: [
-    Transfer, Camera, StatusBar, SplashScreen, Geolocation, ImagePicker,
+
+    Transfer,
+    Camera,
+    StatusBar,
+    SplashScreen,
+    Geolocation,
+    Storage,
+    ImagePicker,
+
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
