@@ -7,7 +7,11 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {ImagePicker} from '@ionic-native/image-picker';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
-import {FileUploadOptions, Transfer, TransferObject} from '@ionic-native/transfer';
+import {
+  FileUploadOptions,
+  Transfer,
+  TransferObject
+} from '@ionic-native/transfer';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 import {AddImagesPage} from '../pages/add-images/add-images';
@@ -20,8 +24,10 @@ import {LocationAuctionPage} from '../pages/location-auction/location-auction';
 import {LoginPage} from '../pages/login/login';
 import {MyAuctionsPage} from '../pages/my-auctions/my-auctions';
 
-import {SingleCategoryAuctionPage} from '../pages/single-category-auction/single-category-auction';
-import { IonicStorageModule } from '@ionic/Storage';
+import {
+  SingleCategoryAuctionPage
+} from '../pages/single-category-auction/single-category-auction';
+import {IonicStorageModule} from '@ionic/Storage';
 
 import {MybidsAuctionPage} from '../pages/mybids-auction/mybids-auction';
 import {NewAuctionPage} from '../pages/new-auction/new-auction';
@@ -34,10 +40,22 @@ import {CapitalizePipe} from './capitalize.pipe';
 
 @NgModule({
   declarations: [
-    MyApp, HomePage, LoginPage, RegisterPage, DetailsAuctionPage,
-    FindAuctionPage, EditAuctionPage, NewAuctionPage, LocationAuctionPage,
-    SearchAuctionPage, CategoryAuctionPage, SingleCategoryAuctionPage,
-    MybidsAuctionPage, MyAuctionsPage, CapitalizePipe, AddImagesPage
+    MyApp,
+    HomePage,
+    LoginPage,
+    RegisterPage,
+    DetailsAuctionPage,
+    FindAuctionPage,
+    EditAuctionPage,
+    NewAuctionPage,
+    LocationAuctionPage,
+    SearchAuctionPage,
+    CategoryAuctionPage,
+    SingleCategoryAuctionPage,
+    MybidsAuctionPage,
+    MyAuctionsPage,
+    CapitalizePipe,
+    AddImagesPage
   ],
   imports: [
 
@@ -50,10 +68,21 @@ import {CapitalizePipe} from './capitalize.pipe';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp, HomePage, LoginPage, RegisterPage, DetailsAuctionPage,
-    FindAuctionPage, EditAuctionPage, NewAuctionPage, LocationAuctionPage,
-    SearchAuctionPage, CategoryAuctionPage, SingleCategoryAuctionPage,
-    MybidsAuctionPage, MyAuctionsPage, AddImagesPage
+    MyApp,
+    HomePage,
+    LoginPage,
+    RegisterPage,
+    DetailsAuctionPage,
+    FindAuctionPage,
+    EditAuctionPage,
+    NewAuctionPage,
+    LocationAuctionPage,
+    SearchAuctionPage,
+    CategoryAuctionPage,
+    SingleCategoryAuctionPage,
+    MybidsAuctionPage,
+    MyAuctionsPage,
+    AddImagesPage
   ],
   providers: [
 
