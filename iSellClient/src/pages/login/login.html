@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
     <ion-title>Login</ion-title>
   </ion-navbar>
 
@@ -24,4 +24,7 @@
       <button (click)="login()" ion-button color="primary" block>Sign In</button>
     </div>
   </form>
+  <div class="registerLink">
+    <a padding (click)="goToRegister()">Don't have an account? Register.</a>
+  </div>
 </ion-content>

@@ -3,6 +3,7 @@ import {FormGroup, FormControl} from '@angular/forms';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Http} from '@angular/http';
 import * as myGlobals from '../../app/globals';
+import {LoginPage} from '../login/login';
 
 /**
  * Generated class for the RegisterPage page.
@@ -38,7 +39,7 @@ export class RegisterPage {
 
 
     this.http.post(this.url, body)
-        .subscribe(data => { console.log(data); },
+        .subscribe(data => { this.navCtrl.push(LoginPage); },
                    error => { console.log(error.json()); });
   }
 
